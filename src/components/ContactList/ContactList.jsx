@@ -1,20 +1,14 @@
 import { PropTypes } from 'prop-types';
 
-import { ContactListItem } from './ContactListItem/ContactListItem';
-
 import { ContactsList } from './ContactList.styled';
 
-export function ContactList(props) {
-  const { contacts, onContactRemoveCallback } = props;
+import { ContactListItem } from './ContactListItem/ContactListItem';
 
+export function ContactList({ contacts }) {
   return (
     <ContactsList>
       {contacts.map(contactData => (
-        <ContactListItem
-          key={contactData.id}
-          contactData={contactData}
-          onContactRemoveCallback={onContactRemoveCallback}
-        />
+        <ContactListItem key={contactData.id} contactData={contactData} />
       ))}
     </ContactsList>
   );
@@ -28,5 +22,4 @@ ContactList.propTypes = {
       id: PropTypes.string.isRequired,
     })
   ),
-  onContactRemoveCallback: PropTypes.func.isRequired,
 };

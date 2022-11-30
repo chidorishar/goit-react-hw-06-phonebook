@@ -1,14 +1,18 @@
 import { PropTypes } from 'prop-types';
-import { Box } from 'components/common/Box/Box.styled';
-import { theme } from 'utils/theme';
+import { useDispatch } from 'react-redux';
 
+import { theme } from 'utils/theme';
+import { deleteContact } from 'redux/contactsSlice';
+
+import { Box } from 'components/common/Box/Box.styled';
 import { ContactInfo, DeleteButton } from './ContactListItem.styled';
 
 export function ContactListItem(props) {
   const {
     contactData: { name, number, id },
-    onContactRemoveCallback,
   } = props;
+
+  const dispatch = useDispatch();
 
   return (
     <Box
@@ -29,7 +33,7 @@ export function ContactListItem(props) {
       <ContactInfo>
         {name}: {number}
       </ContactInfo>
-      <DeleteButton onClick={() => onContactRemoveCallback(id)} isDelete={true}>
+      <DeleteButton onClick={() => dispatch(deleteContact(id))} isDelete={true}>
         Delete
       </DeleteButton>
     </Box>
@@ -42,5 +46,4 @@ ContactListItem.propTypes = {
     number: PropTypes.string.isRequired,
     id: PropTypes.string.isRequired,
   }),
-  onContactRemoveCallback: PropTypes.func.isRequired,
 };

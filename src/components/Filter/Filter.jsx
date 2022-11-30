@@ -1,15 +1,16 @@
-import { PropTypes } from 'prop-types';
+import { useDispatch } from 'react-redux';
+
+import { setFilter } from 'redux/filterSlice';
+
 import { FilterLabel, FilterInput } from './Filter.styled';
 
-export function Filter({ onInputCallback }) {
+export function Filter() {
+  const dispatch = useDispatch();
+
   return (
     <FilterLabel>
       Filter contacts by name
-      <FilterInput onInput={e => onInputCallback(e.target.value)} />
+      <FilterInput onInput={e => dispatch(setFilter(e.target.value))} />
     </FilterLabel>
   );
 }
-
-Filter.propTypes = {
-  onInputCallback: PropTypes.func.isRequired,
-};

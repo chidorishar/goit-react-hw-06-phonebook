@@ -1,79 +1,49 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useSelector } from 'react-redux';
 import { ThemeProvider } from '@emotion/react';
-import { Notify } from 'notiflix/build/notiflix-notify-aio';
-import { nanoid } from 'nanoid';
+// import { Notify } from 'notiflix/build/notiflix-notify-aio';
 import { theme } from 'utils/theme';
+
+import { getContacts, getFilter } from 'redux/selectors';
+
 import { Box } from 'components/common/Box/Box.styled';
 import { ContactForm, ContactList, Filter } from './AllComponents';
 
-const LS_KEY = 'contacts';
-
 export function App() {
-  const [contacts, setContacts] = useState(() => {
-    let readFromLSContacts = [];
+  const filterValue = useSelector(getFilter);
+  const contactsData = useSelector(getContacts);
 
-    try {
-      readFromLSContacts = JSON.parse(localStorage.getItem(LS_KEY)) ?? [];
-    } catch (error) {
-      console.log(
-        'There is occurred error while attempting to read data from local storage!'
-      );
-    }
-
-    return readFromLSContacts;
-  });
-  const [filterString, setFilter] = useState('');
   //filter contacts on filter value or array of contacts changed
-  const filteredContacts = useMemo(() => {
-    const normalizedFilter = filterString.toLowerCase().trim();
+  const filteredContacts = (() => {
+    const normalizedFilter = filterValue.toLowerCase().trim();
 
     if (!normalizedFilter) {
       return [];
     }
-
-    return contacts.filter(({ name }) =>
+    console.log('Filtering...');
+    return contactsData.filter(({ name }) =>
       name.toLowerCase().includes(normalizedFilter)
     );
-  }, [contacts, filterString]);
+  })();
 
-  //on contacts changed
-  useEffect(() => {
-    localStorage.setItem(LS_KEY, JSON.stringify(contacts));
-  }, [contacts]);
+  // function onContactAdd({ name, number }) {
+  //   if (hasContactWithName(name)) {
+  //     Notify.warning("Can't add already existing contact");
+  //     return;
+  //   }
 
-  function onContactAdd({ name, number }) {
-    if (hasContactWithName(name)) {
-      Notify.warning("Can't add already existing contact");
-      return;
-    }
+  // }
 
-    setContacts(prevState => {
-      const normName = name.trim();
-      const updatedContacts = [
-        ...prevState,
-        { name: normName, number, id: nanoid() },
-      ];
+  // function hasContactWithName(searchName) {
+  //   if (!contactsData) return;
 
-      return updatedContacts;
-    });
-  }
+  //   const searchNameNormalized = searchName.trim().toLowerCase();
 
-  function onRemoveContact(contactIdToRemove) {
-    setContacts(prevState =>
-      prevState.filter(({ id }) => id !== contactIdToRemove)
-    );
-  }
+  //   return contactsData.some(
+  //     ({ name }) => name.toLowerCase() === searchNameNormalized
+  //   );
+  // }
 
-  function hasContactWithName(searchName) {
-    if (!contacts) return;
-
-    const searchNameNormalized = searchName.trim().toLowerCase();
-
-    return contacts.some(
-      ({ name }) => name.toLowerCase() === searchNameNormalized
-    );
-  }
-
+  console.log(filteredContacts);
   return (
     <ThemeProvider theme={theme}>
       <Box
@@ -86,7 +56,7 @@ export function App() {
       >
         <Box margin="0 auto" color="textColored">
           <h1>Phonebook</h1>
-          <ContactForm onSubmitCallback={onContactAdd} />
+          <ContactForm />
 
           <Box
             width={0.85}
@@ -96,10 +66,9 @@ export function App() {
             color="textColoredSecondary"
           >
             <h2>Contacts</h2>
-            <Filter value={filterString} onInputCallback={setFilter} />
+            <Filter />
             <ContactList
-              contacts={filterString ? filteredContacts : contacts}
-              onContactRemoveCallback={onRemoveContact}
+              contacts={filterValue ? filteredContacts : contactsData}
             />
           </Box>
         </Box>
