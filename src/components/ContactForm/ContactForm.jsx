@@ -18,6 +18,10 @@ const INPUTS_NAMES = {
 export function ContactForm() {
   const [name, setName] = useState('');
   const [number, setNumber] = useState('');
+  const stateMethods = {
+    [INPUTS_NAMES.name]: setName,
+    [INPUTS_NAMES.number]: setNumber,
+  };
   const dispatch = useDispatch();
 
   const onSubmit = e => {
@@ -29,22 +33,9 @@ export function ContactForm() {
   };
 
   const onInput = e => {
-    let setStateFunc = null;
     const { name: inputName, value: inputValue } = e.target;
 
-    switch (inputName) {
-      case INPUTS_NAMES.name:
-        setStateFunc = setName;
-        break;
-      case INPUTS_NAMES.number:
-        setStateFunc = setNumber;
-        break;
-
-      default:
-        return;
-    }
-
-    setStateFunc(inputValue);
+    stateMethods[inputName](inputValue);
   };
 
   return (
