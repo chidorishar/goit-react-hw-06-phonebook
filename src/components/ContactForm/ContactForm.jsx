@@ -27,7 +27,9 @@ export function ContactForm() {
   const dispatch = useDispatch();
 
   function isContactWithNameExist(searchName) {
-    const { contacts: contactsData } = store.getState();
+    const {
+      contacts: { contacts: contactsData },
+    } = store.getState();
 
     if (!contactsData) return;
 
