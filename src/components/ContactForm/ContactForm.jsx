@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
+import { Notify } from 'notiflix';
 
+import { store } from 'redux/store.js';
 import { addContact } from 'redux/contactsSlice';
 
 import {
@@ -24,8 +26,25 @@ export function ContactForm() {
   };
   const dispatch = useDispatch();
 
+  function isContactWithNameExist(searchName) {
+    const { contacts: contactsData } = store.getState();
+
+    if (!contactsData) return;
+
+    const searchNameNormalized = searchName.trim().toLowerCase();
+
+    return contactsData.some(
+      ({ name }) => name.toLowerCase() === searchNameNormalized
+    );
+  }
+
   const onSubmit = e => {
     e.preventDefault();
+
+    if (isContactWithNameExist(name)) {
+      Notify.warning("Can't add already existing contact");
+      return;
+    }
 
     dispatch(addContact({ name, number }));
     setName('');

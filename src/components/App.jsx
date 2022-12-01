@@ -6,24 +6,6 @@ import { Box } from 'components/common/Box/Box.styled';
 import { ContactForm, ContactList, Filter } from './AllComponents';
 
 export function App() {
-  // function onContactAdd({ name, number }) {
-  //   if (hasContactWithName(name)) {
-  //     Notify.warning("Can't add already existing contact");
-  //     return;
-  //   }
-
-  // }
-
-  // function hasContactWithName(searchName) {
-  //   if (!contactsData) return;
-
-  //   const searchNameNormalized = searchName.trim().toLowerCase();
-
-  //   return contactsData.some(
-  //     ({ name }) => name.toLowerCase() === searchNameNormalized
-  //   );
-  // }
-
   return (
     <ThemeProvider theme={theme}>
       <Box
