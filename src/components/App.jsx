@@ -1,30 +1,11 @@
-import { useSelector } from 'react-redux';
 import { ThemeProvider } from '@emotion/react';
 // import { Notify } from 'notiflix/build/notiflix-notify-aio';
 import { theme } from 'utils/theme';
-
-import { getContacts, getFilter } from 'redux/selectors';
 
 import { Box } from 'components/common/Box/Box.styled';
 import { ContactForm, ContactList, Filter } from './AllComponents';
 
 export function App() {
-  const filterValue = useSelector(getFilter);
-  const contactsData = useSelector(getContacts);
-
-  //filter contacts on filter value or array of contacts changed
-  const filteredContacts = (() => {
-    const normalizedFilter = filterValue.toLowerCase().trim();
-
-    if (!normalizedFilter) {
-      return [];
-    }
-    console.log('Filtering...');
-    return contactsData.filter(({ name }) =>
-      name.toLowerCase().includes(normalizedFilter)
-    );
-  })();
-
   // function onContactAdd({ name, number }) {
   //   if (hasContactWithName(name)) {
   //     Notify.warning("Can't add already existing contact");
@@ -43,7 +24,6 @@ export function App() {
   //   );
   // }
 
-  console.log(filteredContacts);
   return (
     <ThemeProvider theme={theme}>
       <Box
@@ -67,9 +47,7 @@ export function App() {
           >
             <h2>Contacts</h2>
             <Filter />
-            <ContactList
-              contacts={filterValue ? filteredContacts : contactsData}
-            />
+            <ContactList />
           </Box>
         </Box>
       </Box>
